@@ -3,9 +3,10 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import yandex.client.*;
-import yandex.example.DataGenerator;
-import yandex.order.*;
+import yandex.BurgerOrder;
+import yandex.UserClient;
+import yandex.client.DataGenerator;
+import yandex.pojo.*;
 
 import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.equalTo;

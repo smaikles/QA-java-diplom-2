@@ -1,4 +1,4 @@
-package yandex.order;
+package yandex.pojo;
 
 /**
  * класс с полями космобургера

@@ -3,8 +3,10 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import yandex.client.*;
-import yandex.example.DataGenerator;
+import yandex.BurgerOrder;
+import yandex.UserClient;
+import yandex.client.DataGenerator;
+import yandex.pojo.User;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
@@ -16,6 +18,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class UserOrdersTest {
 
+    BurgerOrder burgerOrder;
     UserClient userClient;
     User user;
 
@@ -23,6 +26,7 @@ public class UserOrdersTest {
     public void setUp() {
         user = DataGenerator.getRandomUser();
         userClient = new UserClient();
+        burgerOrder = new BurgerOrder();
         userClient.create(user);
     }
 
@@ -35,7 +39,7 @@ public class UserOrdersTest {
     @Test
     @DisplayName("Получение заказов авторизованного пользователя")
     public void getOrdersForAuthorizedUser() {
-        ValidatableResponse validatableResponse = userClient.getOrders(user);
+        ValidatableResponse validatableResponse = burgerOrder.getOrders(user);
         validatableResponse.assertThat().statusCode(SC_OK);
         validatableResponse.assertThat().body("success", equalTo(true));
     }
@@ -44,7 +48,7 @@ public class UserOrdersTest {
     @DisplayName("Получение заказов неавторизованного пользователя")
     public void getOrdersForUnauthorizedUser() {
         user.setAccessToken(null);
-        ValidatableResponse validatableResponse = userClient.getOrders(user);
+        ValidatableResponse validatableResponse = burgerOrder.getOrders(user);
         validatableResponse.assertThat().statusCode(SC_UNAUTHORIZED);
         validatableResponse.assertThat().body("message", equalTo("You should be authorised"));
     }

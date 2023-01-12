@@ -1,8 +1,9 @@
-package yandex.client;
+package yandex;
 
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
-import yandex.example.RestClient;
+import yandex.client.RestClient;
+import yandex.pojo.User;
 
 import static io.restassured.RestAssured.given;
 
@@ -11,13 +12,17 @@ import static io.restassured.RestAssured.given;
  **/
 
 public class UserClient extends RestClient {
+
+    protected final String ROOT = "/auth";
+
+
     @Step("Авторизация пользователя")
     public ValidatableResponse login(User user) {
         return given()
                 .spec(getBaseSpec())
                 .body(user)
                 .when()
-                .post("auth/login")
+                .post(ROOT + "/login")
                 .then();
 
     }
@@ -28,7 +33,7 @@ public class UserClient extends RestClient {
                 .spec(getBaseSpec())
                 .body(user)
                 .when()
-                .post("auth/register")
+                .post(ROOT + "/register")
                 .then();
         user.setAccessToken(validatableResponse.extract().response().jsonPath().getString("accessToken"));
         return validatableResponse;
@@ -41,7 +46,7 @@ public class UserClient extends RestClient {
                     .spec(getBaseSpec())
                     .header("Authorization", user.getAccessToken())
                     .when()
-                    .delete("auth/user")
+                    .delete(ROOT + "/user")
                     .then();
         }
     }
@@ -54,34 +59,15 @@ public class UserClient extends RestClient {
                     .header("Authorization", oldUser.getAccessToken())
                     .when()
                     .body(newUserCredentials)
-                    .patch("auth/user")
+                    .patch(ROOT + "/user")
                     .then();
         } else {
             return given()
                     .spec(getBaseSpec())
                     .when()
                     .body(newUserCredentials)
-                    .patch("auth/user")
-                    .then();
-        }
-    }
-
-    @Step("Получение списка заказов")
-    public ValidatableResponse getOrders(User user) {
-        if (user.getAccessToken() != null) {
-            return given()
-                    .spec(getBaseSpec())
-                    .header("Authorization", user.getAccessToken())
-                    .when()
-                    .get("orders")
-                    .then();
-        } else {
-            return given()
-                    .spec(getBaseSpec())
-                    .when()
-                    .get("orders")
+                    .patch(ROOT + "/user")
                     .then();
         }
     }
 }
-

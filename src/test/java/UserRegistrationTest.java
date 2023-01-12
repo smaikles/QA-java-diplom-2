@@ -3,8 +3,9 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import yandex.client.*;
-import yandex.example.DataGenerator;
+import yandex.UserClient;
+import yandex.client.DataGenerator;
+import yandex.pojo.User;
 
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.apache.http.HttpStatus.SC_OK;

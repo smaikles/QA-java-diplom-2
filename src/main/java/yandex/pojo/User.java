@@ -1,4 +1,4 @@
-package yandex.client;
+package yandex.pojo;
 
 /**
  * класс с полями клиента
